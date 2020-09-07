@@ -1,0 +1,12 @@
+---
+
+test_string: "test"
+
+test_integer: 56
+
+test_ip_address: "192.168.10.5/32"
+
+test_list:
+  - 1
+  - 2
+  - 3

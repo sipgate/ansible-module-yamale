@@ -1,0 +1,9 @@
+---
+
+test_string: str()
+
+test_integer: int()
+
+test_ip_address: ip()
+
+test_list: list(int())

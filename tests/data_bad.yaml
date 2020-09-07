@@ -1,0 +1,9 @@
+---
+
+test_string: 0
+
+test_integer: "test"
+
+test_ip_address: "192.168.10.5/32"
+
+test_list: "no list here"
