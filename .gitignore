@@ -1,0 +1,4 @@
+.vscode/settings.json
+*.tar.gz
+*.pyc
+.idea
