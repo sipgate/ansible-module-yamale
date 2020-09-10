@@ -57,15 +57,21 @@ msg:
 
 from ansible.module_utils.basic import AnsibleModule
 
-# TODO: fail if module not present
-import yamale
+try:
+    import yamale
+except ImportError:
+    yamale_found = False
+else:
+    yamale_found = True
+
 
 def load_data(data_path):
     return yamale.make_data(data_path)
-    
+
 
 def load_schema(schema_path):
     return yamale.make_schema(schema_path)
+
 
 def validate_yaml(data, schema):
     try:
@@ -73,6 +79,7 @@ def validate_yaml(data, schema):
         return True, ""
     except ValueError as e:
         return False, str(e)
+
 
 def main():
     module_args = dict(
@@ -84,6 +91,8 @@ def main():
         argument_spec=module_args,
         supports_check_mode=True,
     )
+    if not yamale_found:
+        module.fail_json(msg='the python yamale module is required')
 
     data = load_data(module.params['data_path'])
 
