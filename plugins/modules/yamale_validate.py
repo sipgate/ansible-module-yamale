@@ -94,9 +94,15 @@ def main():
     if not yamale_found:
         module.fail_json(msg='the python yamale module is required')
 
-    data = load_data(module.params['data_path'])
+    try:
+        data = load_data(module.params['data_path'])
+    except FileNotFoundError:
+        module.fail_json(msg='Data file {} not found'.format(module.params['data_path']))
 
-    schema = load_schema(module.params['schema_path'])
+    try:
+        schema = load_schema(module.params['schema_path'])
+    except FileNotFoundError:
+        module.fail_json(msg='Schema file {} not found'.format(module.params['schema_path']))
 
     yamale_result, message = validate_yaml(data, schema)
 
