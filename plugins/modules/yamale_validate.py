@@ -29,7 +29,7 @@ options:
         description:
           - path to a YAML schema definition
         required: true
-        type: str
+        type: list
     data_path:
         description:
           - path to the YAML file you want to validate
@@ -41,7 +41,9 @@ EXAMPLES = r'''
 ---
 - name: validate sample YAML file
   yamale_validate:
-      schema_path: /path/to/schema.yaml
+      schema_path:
+        - /path/to/schema.yaml
+        - /path/to/schema2.yaml
       data_path: /path/to/data.yaml
 '''
 
@@ -70,7 +72,15 @@ def load_data(data_path):
 
 
 def load_schema(schema_path):
-    return yamale.make_schema(schema_path)
+    return yamale.make_schema(content=merge_schemas(schema_path))
+
+
+def merge_schemas(schema_path):
+    content = ""
+    for file in schema_path:
+        with open(file, 'r') as fs:
+            content += "{}\n".format(fs.read())
+    return content
 
 
 def validate_yaml(data, schema):
@@ -84,7 +94,7 @@ def validate_yaml(data, schema):
 def main():
     module_args = dict(
         data_path=dict(type='str', required=True),
-        schema_path=dict(type='str', required=True)
+        schema_path=dict(type='list', required=True)
     )
 
     module = AnsibleModule(

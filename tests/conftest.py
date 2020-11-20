@@ -63,5 +63,5 @@ def mock_ansible(mocker):
 @pytest.fixture(scope="function")
 def module_args():
     return {
-        'schema_path': 'tests/schema.yaml',
+        'schema_path': ['tests/schema.yaml', 'tests/schema2.yaml'],
     }
