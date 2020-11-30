@@ -1,6 +1,7 @@
 ---
 
 test_string: "test"
+test2_string: "test2"
 
 test_integer: 56
 

@@ -49,7 +49,7 @@ def test_yaml_with_additional_fields_fails_in_strict_mode(module_args):
     assert (result.value.args[0]['changed'] is False)
 
 
-def test_yaml_with_additional_fields_fails_in_strict_mode(module_args):
+def test_yaml_with_additional_fields_fails_does_not_fail_in_strict_mode(module_args):
     import yamale_validate
 
     set_module_args({
