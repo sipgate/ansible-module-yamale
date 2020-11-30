@@ -35,6 +35,12 @@ options:
           - path to the YAML file you want to validate
         required: true
         type: str
+    strict:
+        description:
+          - Disabled strict mode allows additional fields to be present that are not defined in the schema
+        required: false
+        type: bool
+        default: true
 '''
 
 EXAMPLES = r'''
@@ -83,9 +89,9 @@ def merge_schemas(schema_path):
     return content
 
 
-def validate_yaml(data, schema):
+def validate_yaml(data, schema, strict):
     try:
-        yamale.validate(schema, data)
+        yamale.validate(schema, data, strict=strict)
         return True, ""
     except ValueError as e:
         return False, str(e)
@@ -94,7 +100,8 @@ def validate_yaml(data, schema):
 def main():
     module_args = dict(
         data_path=dict(type='str', required=True),
-        schema_path=dict(type='list', required=True)
+        schema_path=dict(type='list', required=True),
+        strict=dict(type='bool', required=False, default=True)
     )
 
     module = AnsibleModule(
@@ -114,7 +121,9 @@ def main():
     except FileNotFoundError:
         module.fail_json(msg='Schema file {} not found'.format(module.params['schema_path']))
 
-    yamale_result, message = validate_yaml(data, schema)
+    strict_mode = module.params['strict']
+
+    yamale_result, message = validate_yaml(data, schema, strict_mode)
 
     result = dict(
         changed=False,
